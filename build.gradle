@@ -1,0 +1,68 @@
+apply plugin: 'idea'      // for intellij project
+
+group 'com.github.vsouhrada.kotlin'
+version '1.0-SNAPSHOT'
+
+buildscript {
+
+    ext.kotlin_version = '1.0.2'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'kotlin'
+
+repositories {
+    mavenCentral()
+    maven { url "https://dl.bintray.com/kotlin/exposed" }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile 'org.jetbrains.exposed:exposed:0.5.0'
+    //compile 'org.xerial:sqlite-jdbc:3.8.11.2'
+    compile 'com.h2database:h2:1.4.192'
+}
+
+// Gradle Wrapper Settings
+//task wrapper(type: Wrapper) {
+//    gradleVersion = rootProject.ext.gradleVersion
+//}
+
+
+
+
+//apply plugin: 'java'
+//apply plugin: 'application'  // to run com.gk_software.futurelab.kpi.ws.main file
+//
+//sourceCompatibility = 1.8
+//targetCompatibility = 1.8
+
+//
+//dependencies {
+//    compile 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.2'
+//    compile 'org.jetbrains.exposed:exposed:0.5.0'
+//}
+//
+//sourceSets {
+//
+//    main {
+//        kotlin {
+//            srcDir 'src/main/kotlin'
+//        }
+//
+//        //compileClasspath += [configurations.provided]
+//    }
+//
+//    test {
+//        kotlin {
+//            srcDir 'src/test/kotlin'
+//        }
+//        //compileClasspath += [configurations.provided]
+//    }
+//}
