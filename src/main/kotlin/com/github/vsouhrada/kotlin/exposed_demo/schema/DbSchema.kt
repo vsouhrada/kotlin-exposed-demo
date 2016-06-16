@@ -1,5 +1,8 @@
 package com.github.vsouhrada.kotlin.exposed_demo.schema
 
+import com.github.vsouhrada.kotlin.exposed_demo.dao.StringEntity
+import com.github.vsouhrada.kotlin.exposed_demo.dao.StringEntityClass
+import com.github.vsouhrada.kotlin.exposed_demo.dao.StringIdTable
 import org.jetbrains.exposed.dao.*
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
@@ -31,14 +34,14 @@ object CityTable : IntIdTable("city") {
 object PetTable : IntIdTable("pet") {
 
   val birthDate = date("birth_date")
-  val petType = reference("petType", PetTypeTable.name)
+  val petType = reference("petType", PetTypeTable.id)
   val owner = reference("owner", OwnerTable)
 
 }
 
-object PetTypeTable : Table("pet_type") {
+object PetTypeTable : StringIdTable("pet_type", "name", 20) {
 
-  val name = varchar("name", 20).primaryKey().entityId()
+  val isEnabled = bool("isEnabled")
 
 }
 
@@ -73,5 +76,27 @@ class Owner(id: EntityID<Int>) : IntEntity(id) {
 
   override fun toString(): String {
     return "Owner{id=$id, firstName=$firstName, lastName=$lastName, address=$address, phone=$phone, city=$city"
+  }
+}
+
+class PetType(id: EntityID<String>) : StringEntity(id) {
+  companion object : StringEntityClass<PetType>(PetTypeTable)
+
+  var isEnabled by PetTypeTable.isEnabled
+
+  override fun toString(): String {
+    return "PetType{id=$id, isEnabled=$isEnabled}"
+  }
+}
+
+class Pet(id: EntityID<Int>) : IntEntity(id) {
+  companion object : IntEntityClass<Pet>(PetTable)
+
+  var birthDate by PetTable.birthDate
+  var petType by PetType referencedOn PetTable.petType
+  var owner by Owner referencedOn PetTable.owner
+
+  override fun toString(): String {
+    return "Pet{id=$id, birthDate=$birthDate, petType=$petType, owner=$owner}"
   }
 }

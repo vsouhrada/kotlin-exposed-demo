@@ -4,11 +4,8 @@ import com.github.vsouhrada.kotlin.exposed_demo.schema.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.StdOutSqlLogger
-import org.jetbrains.exposed.sql.Transaction
-import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.vendors.DatabaseDialect
-import java.sql.Connection
+import org.joda.time.DateTime
 
 /**
  * @author vsouhrada
@@ -35,6 +32,8 @@ fun initDatabaseStructure() {
     println("---------------------")
     println("Cities: ${City.all().joinToString { it.name }}")
     println("Owners: ${Owner.all().joinToString { it.toString() }}")
+    println("PetTypes: ${PetType.all().joinToString { it.toString() }}")
+    println("Pets: ${Pet.all().joinToString { it.toString() }}")
   }
 
 }
@@ -42,15 +41,38 @@ fun initDatabaseStructure() {
 fun initOwners() {
   val pilsen = City.new { name = "Pilsen" }
   val schoeneck = City.new { name = "Schoeneck" }
-  val paris = City.new { name = "Paris"}
+  val paris = City.new { name = "Paris" }
   City.new { name = "Prague" }
 
-  Owner.new {
+  val owner1 = Owner.new {
     firstName = "Vaclav"
     lastName = "Souhrada"
     address = "NiceStreet 11"
     phone = "723 456 524"
     city = pilsen
+  }
+
+  val owner2 = Owner.new {
+    firstName = "Stephan"
+    lastName = "Boese"
+    address = "Friedrich Strase 23"
+    phone = "722 455 123"
+    city = schoeneck
+  }
+
+  val dog = PetType.new(id = "Dog") { isEnabled = true }
+  val cat = PetType.new(id = "Cat") { isEnabled = true }
+
+  Pet.new {
+    birthDate = DateTime.now()
+    petType = dog
+    owner = owner1
+  }
+
+  Pet.new {
+    birthDate = DateTime.now()
+    petType = cat
+    owner = owner2
   }
 
 }
